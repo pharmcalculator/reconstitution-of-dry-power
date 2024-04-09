@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Solution Preparation Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        input[type=number] {
+            width: 100px;
+            padding: 5px;
+            margin: 5px 0;
+        }
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px; /* Increased font size */
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Solution Preparation Calculator</h1>
+    <p>Disclaimer: This calculator assumes that the volume occupied by the dry powder is negligible.</p>
+    <label for="vialStrength">Vial Strength (units):</label>
+    <input type="number" id="vialStrength" min="1" required>
+    <br>
+    <label for="reconstitutionVolume">Reconstitution Volume (mL):</label>
+    <input type="number" id="reconstitutionVolume" min="0.1" step="0.1" required>
+    <br>
+    <label for="desiredConcentration">Desired Concentration (units/mL):</label>
+    <input type="number" id="desiredConcentration" min="1" required>
+    <br>
+    <label for="finalVolume">Final Volume (mL):</label>
+    <input type="number" id="finalVolume" min="1" required>
+    <br>
+    <button onclick="calculateWithdrawalVolume()">Calculate Withdrawal Volume</button>
+    <p id="result"></p>
+
+    <script>
+        function calculateWithdrawalVolume() {
+            const vialStrength = parseFloat(document.getElementById("vialStrength").value);
+            const reconstitutionVolume = parseFloat(document.getElementById("reconstitutionVolume").value);
+            const reconstitutedConcentration = vialStrength / reconstitutionVolume;
+            const desiredConcentration = parseFloat(document.getElementById("desiredConcentration").value);
+            const finalVolume = parseFloat(document.getElementById("finalVolume").value);
+
+            const withdrawalVolume = (desiredConcentration * finalVolume) / reconstitutedConcentration;
+
+            if (isNaN(vialStrength) || isNaN(reconstitutionVolume) || isNaN(desiredConcentration) || isNaN(finalVolume) || vialStrength <= 0 || reconstitutionVolume <= 0 || desiredConcentration <= 0 || finalVolume <= 0) {
+                displayError("Please enter valid positive values for vial strength, reconstitution volume, desired concentration, and final volume.");
+            } else {
+                document.getElementById("result").textContent = `Withdraw ${withdrawalVolume.toFixed(2)} mL from the reconstituted vial and add diluent to obtain a final volume of ${finalVolume} mL with a concentration of ${desiredConcentration} units/mL.`;
+                document.getElementById("result").classList.remove("error");
+            }
+        }
+
+        function displayError(message) {
+            const resultElement = document.getElementById("result");
+            resultElement.textContent = message;
+            resultElement.style.color = "red";
+        }
+    </script>
+</body>
+</html>
